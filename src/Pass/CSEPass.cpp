@@ -20,8 +20,11 @@ namespace {
 			for(Module::iterator func = M.begin(); func != M.end(); func++){
 				CSELatticeNode* beginNode = new CSELatticeNode(true, false);
 				CSEFlowFunction* flowFunc = new CSEFlowFunction();
+				FlowFunction* flowFunc_cast = dyn_cast<FlowFunction>(flowFunc);
 				WorklistAlg* worklistAlg = new WorklistAlg();
-				worklistAlg->Run_Worklist(*func, flowFunc, beginNode); 					
+				//worklistAlg->init(*func, flowFunc_cast, beginNode);
+				map<Instruction*, LatticeNode*> finalMap = worklistAlg->Run_Worklist(*func, flowFunc_cast, beginNode); 	
+				errs() << "finalMap size is: " << finalMap.size()<<"\n";				
 			}
 			return true;
 		}
