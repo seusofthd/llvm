@@ -11,6 +11,7 @@
 #include <queue>
 #include <vector>
 #include <iterator>
+#include <stdio.h>
 using namespace std;
 using namespace llvm;
 class WorklistAlg{

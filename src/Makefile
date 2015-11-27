@@ -1,5 +1,5 @@
 LEVEL = ../../..
 
-DIRS = Lattice FlowFunction WorklistAlg
+DIRS=Lattice FlowFunction WorklistAlg Pass
 
 include $(LEVEL)/Makefile.common

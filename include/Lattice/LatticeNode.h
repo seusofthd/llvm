@@ -17,8 +17,8 @@ public:
 	LatticeNode(LatticeType type, bool isTop, bool isBottom){ this->type = type; this->isTop = isTop; this->isBottom = isBottom;}
 //	LatticeType getType() const{ return type;}
 	/*Virtual functions. Cannot use pure virtual functions!!! Otherwise it cannot be initialized in the WorklistAlg class*/
-	virtual LatticeNode* join(LatticeNode* node);
-	virtual bool equal(LatticeNode* node);
+	virtual LatticeNode* join(LatticeNode* node){return NULL;}
+	virtual bool equal(LatticeNode* node){return false;}
 	bool isTop;
 	bool isBottom;
 	LatticeType type; 

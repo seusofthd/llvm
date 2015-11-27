@@ -1,7 +1,7 @@
 #include "../../include/FlowFunction/CSEFlowFunction.h"
 typedef vector<LatticeNode*>::iterator laIter;
 typedef map<Value*, Instruction*>::iterator mapIter;
-LatticeNode* CSEFlowFunction::o(Instruction *inst, vector<LatticeNode*> input){
+LatticeNode* CSEFlowFunction::operator()(Instruction *inst, vector<LatticeNode*> input){
 	in = merge(input);
 	map<Value*, Instruction*> stmt = in->statements;
 	out = new CSELatticeNode(false, false, stmt);

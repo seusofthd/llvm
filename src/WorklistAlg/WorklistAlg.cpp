@@ -17,7 +17,7 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 		for(BasicBlock::iterator inst = B->begin(); inst != B->end(); inst++){
 			worklist.push(inst);
 			LatticeNode* node = new LatticeNode(beginNode->type, false, true);
-			/*find it's next node*/
+//			find it's next node
 			output_map[inst] = node;
 			if(!inst->isTerminator()){
 				BasicBlock::iterator next_inst = inst;
@@ -35,11 +35,12 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 			}
 		}
 	}
+	
 }
 
 map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunction* flowFunc, LatticeNode* beginNode){
 	/*Initialize all the variables*/
-	init(F, flowFunc, beginNode);
+/*	init(F, flowFunc, beginNode);
 
 	while(!worklist.empty()){
 		Instruction *inst = worklist.front();
@@ -63,7 +64,8 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 		LatticeNode* output = merge(input);
 		finalMap[inst] = output;
 	}
-
+*/
+	printf("enter into worklist algorithm");
 	return finalMap;
 }
 
