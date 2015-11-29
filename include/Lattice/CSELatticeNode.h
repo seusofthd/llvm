@@ -14,7 +14,7 @@ class CSELatticeNode: public LatticeNode{
 public:
 
 	CSELatticeNode():LatticeNode(CSELATTICE), statements(map<Value*, Instruction*>()){}
-	CSELatticeNode(bool isBottom, bool isTop):LatticeNode(CSELATTICE, isTop, isBottom), statements(map<Value*, Instruction*>()){errs() << "CSELatticeNode Initialized:" << statements.size() << "\n";} 
+	CSELatticeNode(bool isBottom, bool isTop):LatticeNode(CSELATTICE, isTop, isBottom), statements(map<Value*, Instruction*>()){} 
 	CSELatticeNode(bool isBottom, bool isTop, std::map<Value*, Instruction*> statements1):LatticeNode(CSELATTICE, isTop, isBottom), statements(statements1){}
  	CSELatticeNode(CSELatticeNode& cseNode): LatticeNode(CSELATTICE, cseNode.isTop, cseNode.isBottom), statements(cseNode.statements){}
  	CSELatticeNode(CSELatticeNode* cseNodePtr): LatticeNode(CSELATTICE, cseNodePtr->isTop, cseNodePtr->isBottom), statements(cseNodePtr->statements){}

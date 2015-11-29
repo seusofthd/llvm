@@ -15,7 +15,7 @@ public:
 	static bool classof(const FlowFunction *func){
 		return func->type == CSEFLOW;
 	}
-	void test(){errs() << "test function is called in CSEFlowFunction\n";}
+	virtual void print();
 	CSELatticeNode* merge(vector<LatticeNode*> input);
 
 	/*Override InstVisitor Functions*/

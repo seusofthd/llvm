@@ -57,11 +57,16 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 		Instruction *inst = worklist.front();
 		worklist.pop();
 		if(!matchFlowFunc(inst, flowFunc, beginNode)){
-			errs() << "add in worklist\n";
+//			errs() << "add in worklist\n";
 			for(vector<Instruction*>::iterator iter = successor[inst].begin(); iter != successor[inst].end(); iter++){
 				worklist.push(*iter);
 			}
 		}
+	}
+	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
+//		errs() << "Instruction:" << *iter->first << ":";
+//		errs() << "output lattice node\n";
+		iter->second->print(); 
 	}
 /*
 	// construct finalMap
@@ -97,14 +102,12 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 		errs() << flowFunc->type;
 		CSEFlowFunction *func = cast<CSEFlowFunction>(flowFunc);
 		new_output = (*func)(inst, input);
-		func->test();
 	}
 /*make judgement on whether there are difference between new output lattice and old one*/
 	LatticeNode *old_output = output_map[inst];
 	bool label = old_output->equal(new_output);
 
 	if(!label){
-		errs() << "output edge has been changed\n";
 		output_map[inst] = new_output;
 	}
 	return label;

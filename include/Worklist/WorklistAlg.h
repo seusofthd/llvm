@@ -17,7 +17,7 @@ using namespace std;
 using namespace llvm;
 class WorklistAlg{
 public:
-	WorklistAlg(){errs()<< "worklist algorithm constructed\n";}
+	WorklistAlg(){}
 	map<Instruction*, LatticeNode*> Run_Worklist(Function &F, FlowFunction* flowFunc, LatticeNode* beginNode);
 	void test();
 	/*class variables*/

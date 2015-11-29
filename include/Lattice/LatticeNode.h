@@ -20,7 +20,7 @@ public:
 	/*Virtual functions. Cannot use pure virtual functions!!! Otherwise it cannot be initialized in the WorklistAlg class*/
 	virtual LatticeNode* join(LatticeNode* node){return NULL;}
 	virtual bool equal(LatticeNode* node){return false;}
-	virtual void print(){errs()<<"print lattice node\n";}
+	virtual void print(){errs()<<"---LatticeNode Info---\n";}
 //Class member variable
 	bool isTop;
 	bool isBottom;

@@ -25,6 +25,7 @@ public:
 		return NULL;
 	}
 	virtual LatticeNode* PassFunction(Instruction *inst, vector<LatticeNode*> input){return NULL;}
+	virtual void print(){errs() << "---FlowFunction Info---\n";}
 /*The only class member variable*/
 	FlowFunctionType type;
 
