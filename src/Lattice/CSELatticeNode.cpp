@@ -27,6 +27,7 @@ LatticeNode* CSELatticeNode::join(LatticeNode* node){
 
 bool CSELatticeNode::equal(LatticeNode* node){
 	CSELatticeNode* cseNode = dyn_cast<CSELatticeNode>(node);
+	errs() << "CSELatticeNode equal function\n";
 	map<Value*, Instruction*> statements1 = this->statements;
 	map<Value*, Instruction*> statements2 = cseNode->statements;
 
@@ -43,7 +44,16 @@ bool CSELatticeNode::equal(LatticeNode* node){
 			return false;
 		}
 	}
-
+	errs() << "CSELatticeNode equal function\n";
 	return true;
 }
 
+//void CSELatticeNode::print(){
+//	if(this->isBottom == true)
+//		errs() << "Bottom Lattice Node\n";
+//	if(this->isTop == true)
+//		errs() << "Top Lattice Node\n";
+//	for(map<Value*, Instruction*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
+//		errs() << *(iter->first) << " " << *(iter->second) << "\n";
+//	}
+//}

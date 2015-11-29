@@ -12,6 +12,6 @@ LIBRARYNAME = CSE231
 LOADABLE_MODULE = 1
 
 DIRS = src
-EXTERNAL_DIST = include
+EXTRAL_DIST = include
 include $(LEVEL)/Makefile.common
 

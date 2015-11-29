@@ -22,15 +22,16 @@ namespace {
 				CSEFlowFunction* flowFunc = new CSEFlowFunction();
 				FlowFunction* flowFunc_cast = dyn_cast<FlowFunction>(flowFunc);
 				WorklistAlg* worklistAlg = new WorklistAlg();
-				//worklistAlg->init(*func, flowFunc_cast, beginNode);
 				map<Instruction*, LatticeNode*> finalMap = worklistAlg->Run_Worklist(*func, flowFunc_cast, beginNode); 	
-				errs() << "finalMap size is: " << finalMap.size()<<"\n";				
+//				errs() << "finalMap size is: " << finalMap.size()<<"\n";			
+				errs() << "done\n";	
 			}
 			return true;
 		}
 	};
 
 }
+
 
 char CSEPass::ID = 0;
 static RegisterPass<CSEPass> X("CSEPass", "Common subexpression elimination"); 

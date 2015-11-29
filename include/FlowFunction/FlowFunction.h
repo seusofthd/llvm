@@ -20,6 +20,10 @@ enum FlowFunctionType{
 class FlowFunction{
 public:
 	FlowFunction(FlowFunctionType t):type(t){}
+	virtual LatticeNode* operator()(Instruction *inst, vector<LatticeNode*> input){
+		errs()<<"go to FlowFunction ()\n";
+		return NULL;
+	}
 	virtual LatticeNode* PassFunction(Instruction *inst, vector<LatticeNode*> input){return NULL;}
 /*The only class member variable*/
 	FlowFunctionType type;

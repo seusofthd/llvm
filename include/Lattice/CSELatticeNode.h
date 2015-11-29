@@ -12,7 +12,7 @@ using namespace llvm;
 
 class CSELatticeNode: public LatticeNode{
 public:
- 	map<Value*, Instruction*> statements;
+
 	CSELatticeNode():LatticeNode(CSELATTICE), statements(map<Value*, Instruction*>()){}
 	CSELatticeNode(bool isBottom, bool isTop):LatticeNode(CSELATTICE, isTop, isBottom), statements(map<Value*, Instruction*>()){errs() << "CSELatticeNode Initialized\n";} 
 	CSELatticeNode(bool isBottom, bool isTop, std::map<Value*, Instruction*> statements1):LatticeNode(CSELATTICE, isTop, isBottom), statements(statements1){}
@@ -22,13 +22,25 @@ public:
  	/*Virtual functions that need to be implemented*/
  	virtual LatticeNode* join(LatticeNode* cseNode);
  	virtual bool equal(LatticeNode* cseNode);
- 	bool equal(CSELatticeNode* cseNode);
+//	void print();
 	/*used for dyn_cast converstion*/
 	static bool classof(const LatticeNode* nodePtr){
 		return nodePtr->type == CSELATTICE;
 	}
+	/*Class member variable*/
+	map<Value*, Instruction*> statements;
 };
 
+//void CSELatticeNode::print(){
+//	if(this->isBottom == true)
+//		errs() << "Bottom Lattice Node\n";
+//	if(this->isTop == true)
+//		errs() << "Top Lattice Node\n";
+//	errs() << statements.size() << "\n";
+//	for(map<Value*, Instruction*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
+//		errs() << *(iter->first) <<" " << *(iter->second) << "\n";
+//	}
+//}
 #endif
 
 

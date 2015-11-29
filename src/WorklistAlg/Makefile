@@ -1,5 +1,5 @@
 LEVEL = ../../../..
-LOADABLE_MODULE = 1
+#LOADABLE_MODULE = 1
 
 LIBRARYNAME = worklist
 
