@@ -29,7 +29,7 @@ private:
 	map<Instruction*, LatticeNode*> finalMap;
 	queue<Instruction*> worklist;
 	void init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNode);
-	bool matchFlowFunc(Instruction* inst, FlowFunction* flowFunc);
+	bool matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, LatticeNode* beginNode);
 	LatticeNode* merge(vector<LatticeNode*> input);
 };
 

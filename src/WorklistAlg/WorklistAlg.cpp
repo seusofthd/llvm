@@ -15,6 +15,7 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 		}
 	}
 
+
 	for(Function::iterator B = F.begin(); B != F.end(); B++){
 		for(BasicBlock::iterator inst = B->begin(); inst != B->end(); inst++){
 //			errs() << *inst << "\n";
@@ -51,14 +52,12 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 
 
 map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunction* flowFunc, LatticeNode* beginNode){
-	errs() << "start analyze\n";	
 	init(F, flowFunc, beginNode);
-	errs() << "Function type:" << flowFunc->type << "\n";
 	while(!worklist.empty()){
 		Instruction *inst = worklist.front();
 		worklist.pop();
-		if(!matchFlowFunc(inst, flowFunc)){
-			break;
+		if(!matchFlowFunc(inst, flowFunc, beginNode)){
+			errs() << "add in worklist\n";
 			for(vector<Instruction*>::iterator iter = successor[inst].begin(); iter != successor[inst].end(); iter++){
 				worklist.push(*iter);
 			}
@@ -80,12 +79,14 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 	return finalMap;
 }
 
-bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc){
-	errs() << "flow function type:" << flowFunc->type<< "\n";
+bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, LatticeNode* beginNode){
 	vector<Instruction*> predNodeList = predecessor[inst];
 	vector<LatticeNode*> input;
 	for(vector<Instruction*>::iterator iter = predNodeList.begin(); iter != predNodeList.end(); iter++){
 		input.push_back(output_map[*iter]);
+	}
+	if(input.size() == 0){
+		input.push_back(beginNode);
 	}
 	LatticeNode *new_output;
 
@@ -98,15 +99,15 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc){
 		new_output = (*func)(inst, input);
 		func->test();
 	}
-///*make judgement on whether there are difference between new output lattice and old one*/
-//	LatticeNode *old_output = output_map[inst];
-//	bool label = old_output->equal(new_output);
-//
-//	if(!label){
-//		output_map[inst] = new_output;
-//	}
-//	return label;
-	return true;
+/*make judgement on whether there are difference between new output lattice and old one*/
+	LatticeNode *old_output = output_map[inst];
+	bool label = old_output->equal(new_output);
+
+	if(!label){
+		errs() << "output edge has been changed\n";
+		output_map[inst] = new_output;
+	}
+	return label;
 }
 
 LatticeNode* WorklistAlg::merge(vector<LatticeNode*> input){

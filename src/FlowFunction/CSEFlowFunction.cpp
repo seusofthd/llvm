@@ -2,11 +2,12 @@
 typedef vector<LatticeNode*>::iterator laIter;
 typedef map<Value*, Instruction*>::iterator mapIter;
 LatticeNode* CSEFlowFunction::operator()(Instruction *inst, vector<LatticeNode*> input){
-	errs() << "start the CSEFlowFunction ()\n";
+	errs() << "start the CSEFlowFunction (): input size:" << input.size() << "\n";
 	in = merge(input);
 	map<Value*, Instruction*> stmt = in->statements;
 	out = new CSELatticeNode(false, false, stmt);
 	visit(inst);
+	errs() << "after visiting, statement size:" << out->statements.size() << "\n";
 	LatticeNode* cast_out = out;
 	return cast_out;
 }
@@ -17,31 +18,26 @@ void CSEFlowFunction::visitBinaryOperator(BinaryOperator &I){
 	if(out->statements.find(leftVal) != out->statements.end()){
 		return;
 	}
-	
+	errs() << "not find the statement\n";	
 	Instruction* newInst = &I;
 	for(mapIter iter = out->statements.begin(); iter != out->statements.end(); iter++){
 		Instruction* expr = iter->second;
+		errs() << "iterate map:" << *expr << *newInst << "\n";
 		if(expr->isIdenticalTo(newInst)){
+			errs() << "identical statements:" << *expr <<":" << *newInst << "\n";
 			out->statements[leftVal] = expr; 
 		}
 	}	
 	
 	if(out->statements.find(leftVal) == out->statements.end()){
+		errs() << "add new statement\n";
 		out->statements[leftVal] = newInst;
+		errs() << *leftVal << ":" << *newInst << "\n";
 	}
 }
 
-//void CSEFlowFunction::test(){
-//	errs() << "FlowFunction test\n";
-//}
 /*I don't know whether this kind of writing will invoke the LatticeNode join function or CSELatticeNode join function*/
 CSELatticeNode* CSEFlowFunction::merge(vector<LatticeNode*> input){
-	// vector<CSELatticeNode*> cast_in;
-
-	// for(laIter iter = input.begin(); iter != input.end(); iter++){
-	// 	cast_in.push_back(dyn_cast<CSELatticeNode>(*iter));
-	// }
-
 	while(input.size() > 1){
 		LatticeNode *node1 = input.back();
 		input.pop_back();
