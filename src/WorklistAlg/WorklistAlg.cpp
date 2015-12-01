@@ -63,12 +63,11 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 			}
 		}
 	}
+	errs() << "---worklist algorithm output_map dump started---\n\n";
 	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
-//		errs() << "Instruction:" << *iter->first << ":";
-//		errs() << "output lattice node\n";
 		iter->second->print(); 
 	}
-/*
+	errs() << "---worklist algorithm output_map dump finished---\n\n";
 	// construct finalMap
 	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
 		Instruction* inst = iter->first;
@@ -77,10 +76,20 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 		for(vector<Instruction*>::iterator iter = preNodeList.begin(); iter != preNodeList.end(); iter++){
 			input.push_back(output_map[*iter]);
 		}
-		LatticeNode* output = merge(input);
-		finalMap[inst] = output;
+		// if it is the entrance of the function
+		if(input.size() == 0){
+			finalMap[inst] = beginNode;
+		}else{
+			input.push_back(beginNode);
+			LatticeNode* output = merge(input);
+			finalMap[inst] = output;
+		}
 	}
-*/
+	errs() << "---worklist algorithm finalmap dump started---\n\n";
+	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
+		iter->second->print();	
+	}
+	errs() << "---worklist algorithm finalmap dump finished---\n\n";
 	return finalMap;
 }
 
