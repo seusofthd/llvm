@@ -53,6 +53,7 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 
 map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunction* flowFunc, LatticeNode* beginNode){
 	init(F, flowFunc, beginNode);
+
 	while(!worklist.empty()){
 		Instruction *inst = worklist.front();
 		worklist.pop();
@@ -63,8 +64,10 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 			}
 		}
 	}
+	
 	errs() << "---worklist algorithm output_map dump started---\n\n";
 	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
+		errs()<< *iter->first << "\n";
 		iter->second->print(); 
 	}
 	errs() << "---worklist algorithm output_map dump finished---\n\n";
@@ -87,6 +90,7 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 	}
 	errs() << "---worklist algorithm finalmap dump started---\n\n";
 	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
+		errs() << *iter->first << "\n";
 		iter->second->print();	
 	}
 	errs() << "---worklist algorithm finalmap dump finished---\n\n";
@@ -108,7 +112,7 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 	if(isa<CSEFlowFunction>(flowFunc)){
 
 //		errs() << "cast function to cse\n";
-		errs() << flowFunc->type;
+//		errs() << flowFunc->type;
 		CSEFlowFunction *func = cast<CSEFlowFunction>(flowFunc);
 		new_output = (*func)(inst, input);
 	}
