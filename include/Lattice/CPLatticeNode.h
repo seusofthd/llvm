@@ -3,7 +3,7 @@
 #include <map>
 #include "llvm/IR/Module.h"
 #include "llvm/IR/Function.h"
-#include "llvm/IR/Instructions.h"
+#include "llvm/IR/ConstantInts.h"
 #include "llvm/Support/InstIterator.h"
 #include "llvm/Support/raw_ostream.h"
 #include "LatticeNode.h"
@@ -13,11 +13,11 @@ using namespace llvm;
 class CPLatticeNode: public LatticeNode{
 public:
 
-	CPLatticeNode():LatticeNode(CPLATTICE), statements(map<Value*, Instruction*>()){}
+	CPLatticeNode():LatticeNode(CPLATTICE), statements(map<Value*, ConstantInt*>()){}
 
-	CPLatticeNode(bool isBottom, bool isTop):LatticeNode(CPLATTICE, isTop, isBottom), statements(map<Value*, Instruction*>()){}
+	CPLatticeNode(bool isBottom, bool isTop):LatticeNode(CPLATTICE, isTop, isBottom), statements(map<Value*, ConstantInt*>()){}
 
-  CPLatticeNode(bool isBottom, bool isTop, std::map<Value*, Instruction*> statements1):LatticeNode(CPLATTICE, isTop, isBottom), statements(statements1){}
+  CPLatticeNode(bool isBottom, bool isTop, std::map<Value*, ConstantInt*> statements1):LatticeNode(CPLATTICE, isTop, isBottom), statements(statements1){}
 
   CPLatticeNode(CPLatticeNode& cpNode): LatticeNode(CPLATTICE, cpNode.isTop, cpNode.isBottom), statements(cpNode.statements){}
 
@@ -32,7 +32,7 @@ public:
 		return nodePtr->type == CPLATTICE;
 	}
 	/*Class member variable*/
-	map<Value*, Instruction*> statements;
+	map<Value*, ConstantInt*> statements;
 };
 
 #endif
