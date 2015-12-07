@@ -14,7 +14,7 @@ enum FlowFunctionType{
 	CPFLOW,
 	CSEFLOW,
 	RAFLOW,
-	PAFLOW
+	MAYPFLOW
 };
 
 class FlowFunction{

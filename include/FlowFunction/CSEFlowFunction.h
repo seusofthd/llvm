@@ -19,7 +19,7 @@ public:
 	CSELatticeNode* merge(vector<LatticeNode*> input);
 
 	/*Override InstVisitor Functions*/
-	void visitBinaryOperator(BinaryOperator &I);
+	virtual void visitBinaryOperator(BinaryOperator &I);
 //class member variable
 	CSELatticeNode* in;
 	CSELatticeNode* out;

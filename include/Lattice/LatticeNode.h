@@ -10,7 +10,7 @@ enum LatticeType{
 	CPLATTICE,
 	CSELATTICE,
 	RALATTICE,
-	PALATTICE
+	MAYPLATTICE
 };
 class LatticeNode {
 public:
