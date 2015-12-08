@@ -81,11 +81,14 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 		//errs() << "in iteration 2222\n";
 
 		// modified
-		//iter->second->print()
-
+		iter->second->print();
+		/*
 		if (iter->second!=NULL){
 			iter->second->print();
 		}
+		else{
+			errs() << "HEHEHE3 -----iter->first\n";
+		}*/
 	}
 	errs() << "---worklist algorithm output_map dump finished---\n\n";
 	// construct finalMap
@@ -109,10 +112,13 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
 		errs() << *iter->first << "\n";
 
-		// modified: iter->second->print();
-		if (iter->second != NULL){
+		iter->second->print();
+		/*if (iter->second != NULL){
 			iter->second->print();
 		}
+		else{
+			errs() << "HEHEHE4\n";
+		}*/
 
 	}
 	errs() << "---worklist algorithm finalmap dump finished---\n\n";
@@ -154,14 +160,21 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 	//errs() << "eq test\n";
 	//errs() << (new_output == NULL) << '\n';
 	//errs() << (old_output == NULL) << '\n' << '\n';
-	// original version:
-	//bool label = old_output->equal(new_output);
 
-	// ZW modified
+  // ZW modified
+	// original version:
+	bool label = old_output->equal(new_output);
+
+	// *RISK: I don't if two output pointers should be equal if they are both NULL
+	/*
 	bool label = false;
 	if (old_output != NULL && new_output != NULL){
 		label = old_output->equal(new_output);
 	}
+	else{
+		errs() << "HEHEHE1\n";
+	}
+	*/
 
 	//errs() << "eq tested \n";
 	//errs() << "\n";
@@ -180,14 +193,18 @@ LatticeNode* WorklistAlg::merge(vector<LatticeNode*> input){
 		input.pop_back();
 
 
-		//LatticeNode *newNode = node1->join(node2);
-		LatticeNode *newNode;
+		//LatticeNode* newNode = node1->join(node2);
+		LatticeNode *newNode = node1->join(node2);
+		//*RISK: I don't know how to join 2 nodes if one of them is equa; or both of them are equal?
+
+		/*LatticeNode *newNode;
 		if (node1 != NULL){
 			newNode = node1->join(node2);
 		}
 		else{
+			errs() << "HEHEHE2\n";
 			newNode = node2;
-		}
+		}*/
 
 
 		input.push_back(newNode);

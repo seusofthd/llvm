@@ -2,9 +2,7 @@
 
 LatticeNode* CPLatticeNode::join(LatticeNode* node){
   // added 1:32
-  if (node == NULL){
-    return NULL;
-  }
+
   // in constant propogation, join is intersection
   errs() << "incoming join\n";
   if (node->isBottom || this->isTop){
@@ -74,7 +72,7 @@ bool CPLatticeNode::equal(LatticeNode* node){
 }
 
 void CPLatticeNode::print(){
-/*
+
 	errs() << "---CPLatticeNode Info---\n";
 	errs() << "Bottom:" << this->isBottom << "  Top:" << this->isTop << "\n";
 	for(map<Value*, ConstantInt*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
@@ -89,6 +87,6 @@ void CPLatticeNode::print(){
      errs() << "->" << c->getValue().toString(10, true) << "\n";
    }
     errs()<<"\n";
-    */
-    errs() << "CPLattice print\n";
+
+    //errs() << "CPLattice print\n";
 }
