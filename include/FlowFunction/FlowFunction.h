@@ -5,6 +5,8 @@
 #include "llvm/InstVisitor.h"
 #include "../../include/Lattice/LatticeNode.h"
 #include "../../include/Lattice/CSELatticeNode.h"
+#include "../../include/Lattice/CPLatticeNode.h"
+
 #include <vector>
 
 using namespace std;
@@ -19,7 +21,9 @@ enum FlowFunctionType{
 
 class FlowFunction{
 public:
-	FlowFunction(FlowFunctionType t):type(t){}
+	FlowFunction(FlowFunctionType t):type(t){
+		errs()<<"flow function\n";
+	}
 	virtual LatticeNode* operator()(Instruction *inst, vector<LatticeNode*> input){
 		errs()<<"go to FlowFunction ()\n";
 		return NULL;

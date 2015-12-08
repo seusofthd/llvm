@@ -1,12 +1,19 @@
 #include "../../include/Lattice/CPLatticeNode.h"
 
 LatticeNode* CPLatticeNode::join(LatticeNode* node){
+  // added 1:32
+  if (node == NULL){
+    return NULL;
+  }
   // in constant propogation, join is intersection
-  if (in->isBottom || this->isTop){
+  errs() << "incoming join\n";
+  if (node->isBottom || this->isTop){
+    errs() << "joined\n";
     return this;
   }
-  if (this->isBottom || in->isTop) {
-    return in;
+  if (this->isBottom || node->isTop) {
+    errs() << "joined\n";
+    return node;
   }
 
 	CPLatticeNode* cpNode = dyn_cast<CPLatticeNode>(node);
@@ -16,24 +23,29 @@ LatticeNode* CPLatticeNode::join(LatticeNode* node){
 
 	for(map<Value*, ConstantInt*>::iterator iter = statements1.begin(); iter != statements1.end(); iter++){
 		Value* var = iter->first;
-    ConstInt* c1 = iter->second;
+    ConstantInt* c1 = iter->second;
     if (statements2.count(var) > 0){
-      ConstInt* c2 = statements2[var];
+      ConstantInt* c2 = statements2[var];
       if (c1 == c2){
         new_statements[var] = c1;
       }
     }
 	}
   CPLatticeNode* res = new CPLatticeNode(false, false, new_statements);
-  return new_node;
+  errs() << "joined\n";
+  return res;
 }
 
 
 bool CPLatticeNode::equal(LatticeNode* node){
+  errs()<<"incoming equal test\n";
+
   if (node->isBottom || this->isBottom){
+    errs() << "equal tested\n";
     return node->isBottom == this->isBottom;
   }
   if (node->isTop || this->isTop){
+    errs() << "equal tested\n";
     return node->isTop == this->isTop;
   }
 
@@ -44,26 +56,39 @@ bool CPLatticeNode::equal(LatticeNode* node){
 
 	for(map<Value*, ConstantInt*>::iterator iter = statements1.begin(); iter != statements1.end(); iter++){
 	   Value* var = iter->first;
-     ConstInt* c1 = iter->second;
+     ConstantInt* c1 = iter->second;
      if(statements2.count(var) <= 0){
+       errs()<<"equal tested\n";
        return false;
      }
      else{
-       ConstInt* c2 = statements2[var];
+       ConstantInt* c2 = statements2[var];
        if (c1 != c2){
+         errs()<<"equal tested\n";
          return false;
        }
      }
 	}
-//	errs() << "CPLatticeNode equal function\n";
+	errs() << "CPLatticeNode equal function\n";
 	return true;
 }
 
 void CPLatticeNode::print(){
+/*
 	errs() << "---CPLatticeNode Info---\n";
-	errs() << "Bottom:" <<this->isBottom << "  Top:" << this->isTop << "\n";
+	errs() << "Bottom:" << this->isBottom << "  Top:" << this->isTop << "\n";
 	for(map<Value*, ConstantInt*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
-		errs() << iter->first << "->"<<*(iter->second)<< "(" <<iter->second<<")" << "\n";
-	}
-	errs() << "\n";
+     Value* var = iter->first;
+     ConstantInt* c = iter->second;
+     if (var->getName().size() < 10){
+       errs() << var->getName().str();
+     }
+     else{
+       errs() << var->getValueName();
+     }
+     errs() << "->" << c->getValue().toString(10, true) << "\n";
+   }
+    errs()<<"\n";
+    */
+    errs() << "CPLattice print\n";
 }

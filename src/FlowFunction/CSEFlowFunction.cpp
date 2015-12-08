@@ -24,10 +24,10 @@ void CSEFlowFunction::visitBinaryOperator(BinaryOperator &I){
 		if(expr->isIdenticalTo(newInst)){
 //			errs() << "identical statements:" << *expr <<":" << *newInst << "\n";
 			out->statements[leftVal] = expr;
-			break; 
+			break;
 		}
-	}	
-	
+	}
+
 	if(out->statements.find(leftVal) == out->statements.end()){
 //		errs() << "add new statement\n";
 		out->statements[leftVal] = newInst;
@@ -37,6 +37,7 @@ void CSEFlowFunction::visitBinaryOperator(BinaryOperator &I){
 
 /*I don't know whether this kind of writing will invoke the LatticeNode join function or CSELatticeNode join function*/
 CSELatticeNode* CSEFlowFunction::merge(vector<LatticeNode*> input){
+	errs()<<"CSEFlowFunction\n";
 	while(input.size() > 1){
 		LatticeNode *node1 = input.back();
 		input.pop_back();

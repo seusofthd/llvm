@@ -16,6 +16,8 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 	}
 
 
+
+
 	for(Function::iterator B = F.begin(); B != F.end(); B++){
 		for(BasicBlock::iterator inst = B->begin(); inst != B->end(); inst++){
 //			errs() << *inst << "\n";
@@ -54,28 +56,43 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunction* flowFunc, LatticeNode* beginNode){
 	init(F, flowFunc, beginNode);
 
+	//errs() << "begin running worklist\n";
+
 	while(!worklist.empty()){
+		//errs() << "exec Instruction *inst = worklist.front(); \n";
 		Instruction *inst = worklist.front();
+		//errs() << "exec worklist.pop(); \n";
 		worklist.pop();
 		if(!matchFlowFunc(inst, flowFunc, beginNode)){
-//			errs() << "add in worklist\n";
+			//errs() << "add in worklist\n";
 			for(vector<Instruction*>::iterator iter = successor[inst].begin(); iter != successor[inst].end(); iter++){
 				worklist.push(*iter);
 			}
 		}
 	}
-	
+
+
+
 	errs() << "---worklist algorithm output_map dump started---\n\n";
+	//errs() << "out iteration\n";
 	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
+		//errs() << "in iteration\n";
 		errs()<< *iter->first << "\n";
-		iter->second->print(); 
+		//errs() << "in iteration 2222\n";
+
+		// modified
+		//iter->second->print()
+
+		if (iter->second!=NULL){
+			iter->second->print();
+		}
 	}
 	errs() << "---worklist algorithm output_map dump finished---\n\n";
 	// construct finalMap
 	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
 		Instruction* inst = iter->first;
 		vector<Instruction*> preNodeList = predecessor[inst];
-		vector<LatticeNode*> input;	
+		vector<LatticeNode*> input;
 		for(vector<Instruction*>::iterator iter = preNodeList.begin(); iter != preNodeList.end(); iter++){
 			input.push_back(output_map[*iter]);
 		}
@@ -91,7 +108,12 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 	errs() << "---worklist algorithm finalmap dump started---\n\n";
 	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
 		errs() << *iter->first << "\n";
-		iter->second->print();	
+
+		// modified: iter->second->print();
+		if (iter->second != NULL){
+			iter->second->print();
+		}
+
 	}
 	errs() << "---worklist algorithm finalmap dump finished---\n\n";
 	return finalMap;
@@ -108,7 +130,7 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 	}
 	LatticeNode *new_output;
 
-/*add more cases when needed*/	
+/*add more cases when needed*/
 	if(isa<CSEFlowFunction>(flowFunc)){
 
 //		errs() << "cast function to cse\n";
@@ -116,9 +138,33 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 		CSEFlowFunction *func = cast<CSEFlowFunction>(flowFunc);
 		new_output = (*func)(inst, input);
 	}
+	if(isa<CPFlowFunction>(flowFunc)){
+
+		  //errs() << "cast function to cp\n";
+//		errs() << flowFunc->type;
+		CPFlowFunction *func = cast<CPFlowFunction>(flowFunc);
+		new_output = (*func)(inst, input);
+		  //errs() << "casted\n";
+	}
+
+
 /*make judgement on whether there are difference between new output lattice and old one*/
 	LatticeNode *old_output = output_map[inst];
-	bool label = old_output->equal(new_output);
+
+	//errs() << "eq test\n";
+	//errs() << (new_output == NULL) << '\n';
+	//errs() << (old_output == NULL) << '\n' << '\n';
+	// original version:
+	//bool label = old_output->equal(new_output);
+
+	// ZW modified
+	bool label = false;
+	if (old_output != NULL && new_output != NULL){
+		label = old_output->equal(new_output);
+	}
+
+	//errs() << "eq tested \n";
+	//errs() << "\n";
 
 	if(!label){
 		output_map[inst] = new_output;
@@ -132,7 +178,18 @@ LatticeNode* WorklistAlg::merge(vector<LatticeNode*> input){
 		input.pop_back();
 		LatticeNode *node2 = input.back();
 		input.pop_back();
-		LatticeNode *newNode = node1->join(node2);
+
+
+		//LatticeNode *newNode = node1->join(node2);
+		LatticeNode *newNode;
+		if (node1 != NULL){
+			newNode = node1->join(node2);
+		}
+		else{
+			newNode = node2;
+		}
+
+
 		input.push_back(newNode);
 	}
 	return input.front();
