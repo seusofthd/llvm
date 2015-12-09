@@ -26,9 +26,24 @@ public:
 
   // flow function interface
 	LatticeNode* operator()(Instruction *inst, vector<LatticeNode*> input){
-		errs() << "interface!!!\n";
-		errs() << *inst <<'\n';
+
+
+		//errs() << "interface!!!\n";
+		//errs() << *inst <<'\n';
 		in = merge(input);
+
+		/*
+		//errs() << "interface!!!123123\n";
+		for(map<Value*, ConstantInt*>::iterator iter = in->statements.begin(); iter != in->statements.end(); iter++){
+			 //errs() << (*iter) << '\n';
+			 Value* var = iter->first;
+			 ConstantInt* c = iter->second;
+			 errs() << var->getName() <<  " --> " << c->getValue() << ", ";
+		}
+		errs()<<"\n";
+		//errs() << "interface!!!22222222\n";
+		*/
+
 		map<Value*, ConstantInt*> stmt = in->statements;
 		map<Value*, ConstantInt*> tmp_info = in->tmp_info;
 		map<Value*, int> invalid_tmp = in->invalid_tmp;
@@ -80,15 +95,15 @@ public:
 		else{
 			out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
 		}*/
-		errs() << "storing!!\n";
+		//errs() << "storing!!\n";
 		//errs() << *I.getValueOperand() << '\n';
 		if (out->statements.find(I.getValueOperand()) != out->statements.end()){
-			errs() << "storing1112312\n";
-			errs() << *out->statements[I.getValueOperand()] << '\n';
-			out->statements[I.getPointerOperand()] = out->statements[I.getValueOperand()];
+			//errs() << "storing1112312\n";
+			//errs() << *out->statements[I.getValueOperand()] << '\n';
+			out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(out->statements[I.getValueOperand()]);
 		}
 		else{
-			if (I.getValueOperand() != NULL){
+			if (I.getValueOperand()->getValueID() == 11 || I.getValueOperand()->getValueID() == 12){
 				out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
 			}
 		}
@@ -108,20 +123,20 @@ public:
 		}
 		//errs() << "load out\n";
 		*/
-		errs() << "load in\n";
+		//errs() << "load in\n";
 		Value* tmp = &I;
 		errs() << (out->statements.find(I.getPointerOperand()) != out->statements.end()) <<'\n';
 		if (out->statements.find(I.getPointerOperand()) != out->statements.end()){
-			errs() << "loading\n";
+			//errs() << "loading\n";
 			// exist in the incoming information
-			errs() << (*out->statements[I.getPointerOperand()]) << "\n";
+			//errs() << (*out->statements[I.getPointerOperand()]) << "\n";
 			out->statements[tmp] = out->statements[I.getPointerOperand()];
 		}
-		errs() << "load out\n";
+		//errs() << "load out\n";
 	}
 
 	void visitBinaryOperator(BinaryOperator &I){
-		errs() << "BinaryOperator!!!!!\n";
+		errs() << "BinaryOperator12345n";
 		errs() << I <<'\n';
 	}
 
