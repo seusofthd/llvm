@@ -36,14 +36,14 @@ LatticeNode* CPLatticeNode::join(LatticeNode* node){
 
 
 bool CPLatticeNode::equal(LatticeNode* node){
-  errs()<<"incoming equal test\n";
+  //errs()<<"incoming equal test\n";
 
   if (node->isBottom || this->isBottom){
-    errs() << "equal tested\n";
+    //errs() << "equal tested\n";
     return node->isBottom == this->isBottom;
   }
   if (node->isTop || this->isTop){
-    errs() << "equal tested\n";
+    //errs() << "equal tested\n";
     return node->isTop == this->isTop;
   }
 
@@ -56,18 +56,18 @@ bool CPLatticeNode::equal(LatticeNode* node){
 	   Value* var = iter->first;
      ConstantInt* c1 = iter->second;
      if(statements2.count(var) <= 0){
-       errs()<<"equal tested\n";
+       //errs()<<"equal tested\n";
        return false;
      }
      else{
        ConstantInt* c2 = statements2[var];
        if (c1 != c2){
-         errs()<<"equal tested\n";
+         //errs()<<"equal tested\n";
          return false;
        }
      }
 	}
-	errs() << "CPLatticeNode equal function\n";
+	//errs() << "CPLatticeNode equal function\n";
 	return true;
 }
 
@@ -78,13 +78,15 @@ void CPLatticeNode::print(){
 	for(map<Value*, ConstantInt*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
      Value* var = iter->first;
      ConstantInt* c = iter->second;
-     if (var->getName().size() < 10){
+     /*if (var->getName().size() < 10){
        errs() << var->getName().str();
      }
      else{
        errs() << var->getValueName();
+     }*/
+     if(var->hasName()){
+       errs() << var->getName() <<  " --> " << c->getValue() << ", ";
      }
-     errs() << "->" << c->getValue().toString(10, true) << "\n";
    }
     errs()<<"\n";
 

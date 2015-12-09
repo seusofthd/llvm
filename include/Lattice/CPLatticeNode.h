@@ -14,18 +14,23 @@
 using namespace std;
 using namespace llvm;
 
+
+
+
+
+
 class CPLatticeNode: public LatticeNode{
 public:
 
-	CPLatticeNode():LatticeNode(CPLATTICE), statements(map<Value*, ConstantInt*>()){}
+	CPLatticeNode():LatticeNode(CPLATTICE), statements(map<Value*, ConstantInt*>()), tmp_info(map<Value*, ConstantInt*>()), invalid_tmp(map<Value*, int>()){}
 
-	CPLatticeNode(bool isBottom, bool isTop):LatticeNode(CPLATTICE, isTop, isBottom), statements(map<Value*, ConstantInt*>()){}
+	CPLatticeNode(bool isBottom, bool isTop):LatticeNode(CPLATTICE, isTop, isBottom), statements(map<Value*, ConstantInt*>()), tmp_info(map<Value*, ConstantInt*>()), invalid_tmp(map<Value*, int>()){}
 
-  CPLatticeNode(bool isBottom, bool isTop, std::map<Value*, ConstantInt*> statements1):LatticeNode(CPLATTICE, isTop, isBottom), statements(statements1){}
+  CPLatticeNode(bool isBottom, bool isTop, std::map<Value*, ConstantInt*> statements1):LatticeNode(CPLATTICE, isTop, isBottom), statements(statements1), tmp_info(map<Value*, ConstantInt*>()), invalid_tmp(map<Value*, int>()){}
 
-  CPLatticeNode(CPLatticeNode& cpNode): LatticeNode(CPLATTICE, cpNode.isTop, cpNode.isBottom), statements(cpNode.statements){}
+  CPLatticeNode(CPLatticeNode& cpNode): LatticeNode(CPLATTICE, cpNode.isTop, cpNode.isBottom), statements(cpNode.statements), tmp_info(cpNode.tmp_info), invalid_tmp(map<Value*, int>()){}
 
-  CPLatticeNode(CPLatticeNode* cpNodePtr): LatticeNode(CPLATTICE, cpNodePtr->isTop, cpNodePtr->isBottom), statements(cpNodePtr->statements){}
+  CPLatticeNode(CPLatticeNode* cpNodePtr): LatticeNode(CPLATTICE, cpNodePtr->isTop, cpNodePtr->isBottom), statements(cpNodePtr->statements), tmp_info(cpNodePtr->tmp_info), invalid_tmp(map<Value*, int>()){}
 
  	/*Virtual functions that need to be implemented*/
  	virtual LatticeNode* join(LatticeNode* cpNode);
@@ -37,6 +42,9 @@ public:
 	}
 	/*Class member variable*/
 	map<Value*, ConstantInt*> statements;
+	map<Value*, ConstantInt*> tmp_info;
+	map<Value*, int> invalid_tmp;
+
 };
 
 #endif
