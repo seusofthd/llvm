@@ -77,9 +77,10 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 	while(!worklist.empty()){
 		Instruction *inst = worklist.front();
 		worklist.pop();
+//		errs() << "Instruction:" <<*inst << "\n";
 		if(!matchFlowFunc(inst, flowFunc, beginNode)){
 			for(vector<Instruction*>::iterator iter = successor[inst].begin(); iter != successor[inst].end(); iter++){
-				//worklist.push(*iter);
+				worklist.push(*iter);
 			}
 		}
 	}
@@ -107,12 +108,13 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 			finalMap[inst] = output;
 		}
 	}
-//	errs() << "---worklist algorithm finalmap dump started---\n\n";
-//	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
-//		errs() << *iter->first << "\n";
-//		iter->second->print();	
-//	}
-//	errs() << "---worklist algorithm finalmap dump finished---\n\n";
+
+	errs() << "---worklist algorithm finalmap dump started---\n\n";
+	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
+		errs() << "Instruction:"<<*iter->first << "--input lattice:"<<"\n";
+		iter->second->print();	
+	}
+	errs() << "---worklist algorithm finalmap dump finished---\n\n";
 	return finalMap;
 }
 

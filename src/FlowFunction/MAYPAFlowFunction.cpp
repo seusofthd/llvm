@@ -30,7 +30,7 @@ LatticeNode* MAYPFlowFunction::operator()(Instruction* inst, vector<LatticeNode*
 
 
 void MAYPFlowFunction::visitLoadInst(LoadInst &I){
-	Value *val = &I;
+/*	Value *val = &I;
 	Instruction *inst = &I;	
 	map<Value*, set<Value*> > ptInfo = out->point_to_info;
 
@@ -44,7 +44,7 @@ void MAYPFlowFunction::visitLoadInst(LoadInst &I){
 		ptInfo[val].insert(v);
 	}
 	out->point_to_info = ptInfo;
-/*
+
 	errs() << "Load Instruction Debug\n";
 	for(mapIter iter = out->point_to_info.begin(); iter != out->point_to_info.end(); iter++){
 		errs() << "key:"<<*iter->first << "\n";
@@ -73,58 +73,85 @@ void MAYPFlowFunction::visitStoreInst(StoreInst &I){
 	Instruction* inst = &I;
 	Value* x = inst->getOperand(0);
 	Value* y = inst->getOperand(1);
-	errs() << I << "--" <<x << "--"<< y << "\n";
-/*
+//	errs() << I << "--" <<x << "--"<< y << "\n";
 	map<Value*, set<Value*> > ptInfo = out->point_to_info;
 	// y = &x case
 	if(dyn_cast<AllocaInst>(x) && dyn_cast<AllocaInst>(y)){
+//		errs() << "interpret y = &x:" << I << "\n";
+//		errs() << *y << "->" << *x << "\n";
 		ptInfo[y].clear();
 		ptInfo[y].insert(x);
 	}
 
 	if(dyn_cast<LoadInst>(x)){
-		errs() << "loading-----" << "\n";
+//		errs() << "loading-----" << "\n";
 		Value* op_x = dyn_cast<Instruction>(x)->getOperand(0);
 		Value* op_y = dyn_cast<Instruction>(y)->getOperand(0);
-		if(dyn_cast<AllocaInst>(op_x)){
+//		errs() << "y:" << *op_y << " x:" << *op_x << "\n";
+		if(dyn_cast<AllocaInst>(op_x) && dyn_cast<AllocaInst>(op_y)){
+			
+			// *y = x
+			set<Value*> s1 = ptInfo[y];
+			set<Value*> s2 = ptInfo[x];
+			if(s1.size() == 1){
+				ptInfo[*s1.begin()].clear();
+			}
+
+//			errs() << "interpret *y = x" << I << "\n";
+			for(setIter iter = s1.begin(); iter != s1.end(); iter++){
+				for(setIter it = s2.begin(); it != s2.end(); it++){
+					ptInfo[*iter].insert(*it);
+//					errs() << **iter << "->"<<**it;
+				}
+			}
+
+		}else if (dyn_cast<AllocaInst>(op_x) && !dyn_cast<AllocaInst>(op_y)){	
 			//y = x case
-			errs() <<"interpret y = x:" << I << "\n";
+//			errs() <<"interpret y = x:" << I << "\n";
+//			errs()  << *op_x << "--" << *op_y << "\n";
 			ptInfo[y] = ptInfo[op_x]; 
 		}else if(dyn_cast<LoadInst>(op_x)){
 			//y = *x case
-			Value* temp = dyn_cast<LoadInst>(op_x);
-			errs() <<"interpret y = *x" << I << "\n";
+			Value* temp = dyn_cast<Instruction>(op_x)->getOperand(0);
+//			errs() << *temp<< "\n";
+//			errs() <<"interpret y = *x" << I << "\n";
 			set<Value*> first_level = ptInfo[temp];
+//			errs() << "first level size:" << first_level.size() << "\n";
 			for(setIter iter = first_level.begin(); iter != first_level.end(); iter++){
+//				errs() << *temp << "->" << **iter<< "\n";
 				set<Value*> second_level = ptInfo[*iter];
-				for(setIter it = second_level.begin(); it != second_level.end();iter++){
-					ptInfo[y] = ptInfo[*it];
+//				errs() << "\n\n";
+//				errs() << "second level size:" << second_level.size() << "\n";
+				for(setIter it = second_level.begin(); it != second_level.end();it++){
+					ptInfo[y].insert(*it);
+//					errs() << *y << "->" << **it << "\n";
 				}
+//				errs() << "\n\n";
 			}
-		}else if(dyn_cast<LoadInst>(y)){
-			// *y = x
-			Value *t = dyn_cast<LoadInst>(y);
-			errs() << "interpret *y = x" << I << "\n";
-			
 		}
 
 	}
+	out->point_to_info = ptInfo;
+	/*	
 	errs() << "left value"<<*y << "\n";
 	errs() << "points to:" << "\n";
 	for(setIter iter = ptInfo[y].begin(); iter != ptInfo[y].end(); iter++){
 		errs() << **iter << "\n";
 	}
 	errs()<< "\n";
-	out->point_to_info = ptInfo;
+	out->point_to_info = ptInfo;*/
 //	errs() << "Store info:\n";
 //	Instruction *inst =&I;
 //	errs() << inst->getOperand(0)->getName() << "\n";
 //	errs() << inst->getOperand(1)->getName() << "\n";
 //	errs() << *inst	<< "\n";
-*/
+
 }
 
 void MAYPFlowFunction::print(){
-	errs()<< "print function\n";
+	errs()<< "---MAYPFlowFunction Info---\ninput lattice node\n";
+	in->print();
+	errs() << "\noutput lattice node\n";
+	out->print();
 }
 

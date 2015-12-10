@@ -81,17 +81,13 @@ bool MAYPLatticeNode::equal(LatticeNode* node){
 void MAYPLatticeNode::print(){
 	errs() << "---MAYPLatticeNode Info---\n";
 	errs() << "Bottom:" <<this->isBottom <<"  Top:"<< this->isTop << "\n";
-	errs() << "May-Point-To\n";
 	for(mapIter iter = point_to_info.begin(); iter != point_to_info.end(); iter++){
-		errs()<< iter->first << "->";
+		errs() << *iter->first << "->";
 		for(setIter it = iter->second.begin(); it != iter->second.end(); it++){
-			errs() << *it << " ";
+			errs()<< **it << ";";
 		}
 		errs() << "\n";
 	}
-	errs() << "Point-To-All\n"; 
-	for(setIter iter = point_to_all.begin(); iter != point_to_all.end(); iter++){
-		errs() << **iter << "\n";
-	}
+	errs() << "\n";
 }
 

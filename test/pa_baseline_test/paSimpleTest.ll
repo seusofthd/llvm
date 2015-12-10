@@ -10,21 +10,23 @@ entry:
   %c = alloca i32, align 4
   %b = alloca i32, align 4
   %x = alloca i32*, align 8
-  %y = alloca i32*, align 8
+  %y = alloca i32**, align 8
+  %z = alloca i32*, align 8
   store i32 0, i32* %retval
   store i32 2, i32* %a, align 4
   store i32 2, i32* %c, align 4
   store i32 3, i32* %b, align 4
   store i32* %a, i32** %x, align 8
-  store i32* %b, i32** %y, align 8
-  %0 = load i32** %y, align 8
-  store i32* %0, i32** %x, align 8
-  %1 = load i32** %y, align 8
-  %2 = load i32* %1, align 4
-  store i32 %2, i32* %a, align 4
-  %3 = load i32* %a, align 4
-  %4 = load i32** %x, align 8
-  store i32 %3, i32* %4, align 4
+  store i32** %x, i32*** %y, align 8
+  store i32* %b, i32** %z, align 8
+  %0 = load i32*** %y, align 8
+  %1 = load i32** %0, align 8
+  store i32* %1, i32** %z, align 8
+  %2 = load i32** %x, align 8
+  %3 = load i32*** %y, align 8
+  store i32* %2, i32** %3, align 8
+  %4 = load i32** %z, align 8
+  store i32* %4, i32** %x, align 8
   ret i32 0
 }
 

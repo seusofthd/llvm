@@ -50,7 +50,7 @@ void CSELatticeNode::print(){
 	errs() << "---CSELatticeNode Info---\n";
 	errs() << "Bottom:" <<this->isBottom << "  Top:" << this->isTop << "\n";
 	for(map<Value*, Instruction*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
-		errs() << iter->first << "->"<<*(iter->second)<< "(" <<iter->second<<")" << "\n";
+		errs() << *iter->first << "->"<<*(iter->second)<< "(" <<iter->second<<")" << "\n";
 	}
 	errs() << "\n";
 }

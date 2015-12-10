@@ -20,7 +20,7 @@ namespace{
 
 		virtual bool runOnFunction(Function &F){
 			MAYPLatticeNode* beginNode = new MAYPLatticeNode(true, false);
-			beginNode->print();
+//			beginNode->print();
 			MAYPFlowFunction* flowFunc = new MAYPFlowFunction();
 			FlowFunction* flowFunc_cast = dyn_cast<FlowFunction>(flowFunc);
 			WorklistAlg* worklistAlg = new WorklistAlg();
