@@ -1,7 +1,6 @@
 #include "../../include/Lattice/CPLatticeNode.h"
 
 LatticeNode* CPLatticeNode::join(LatticeNode* node){
-  // added 1:32
 
   // in constant propogation, join is intersection
   errs() << "incoming join\n";
@@ -38,19 +37,16 @@ LatticeNode* CPLatticeNode::join(LatticeNode* node){
 
 
 bool CPLatticeNode::equal(LatticeNode* node){
-  //errs()<<"incoming equal test\n";
+
 
   if (node->isBottom || this->isBottom){
-    //errs() << "equal tested\n";
     return node->isBottom == this->isBottom;
   }
   if (node->isTop || this->isTop){
-    //errs() << "equal tested\n";
     return node->isTop == this->isTop;
   }
 
 	CPLatticeNode* cpNode = dyn_cast<CPLatticeNode>(node);
-//	errs() << "CPLatticeNode equal function\n";
 	map<Value*, int> data_info1 = this->data_info;
 	map<Value*, int> data_info2 = cpNode->data_info;
 
@@ -58,19 +54,15 @@ bool CPLatticeNode::equal(LatticeNode* node){
 	   Value* var = iter->first;
      int c1 = iter->second;
      if(data_info2.count(var) <= 0){
-       //errs()<<"equal tested\n";
        return false;
      }
      else{
        int c2 = data_info2[var];
-       // if (c1!=c2)
        if (c1 != c2){
-         //errs()<<"equal tested\n";
          return false;
        }
      }
 	}
-	//errs() << "CPLatticeNode equal function\n";
 	return true;
 }
 
@@ -81,17 +73,9 @@ void CPLatticeNode::print(){
 	for(map<Value*, int>::iterator iter = data_info.begin(); iter != data_info.end(); iter++){
      Value* var = iter->first;
      int c = iter->second;
-     /*if (var->getName().size() < 10){
-       errs() << var->getName().str();
-     }
-     else{
-       errs() << var->getValueName();
-     }*/
      if(var->hasName()){
        errs() << var->getName() <<  " --> " << c << ", ";
      }
    }
     errs()<<"\n";
-
-    //errs() << "CPLattice print\n";
 }

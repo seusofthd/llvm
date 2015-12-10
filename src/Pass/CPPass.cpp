@@ -12,15 +12,6 @@
 using namespace llvm;
 using namespace std;
 
-
-
-
-
-
-
-
-
-
 namespace {
 	struct CPPass: public ModulePass{
 		static char ID;
@@ -29,16 +20,12 @@ namespace {
 			for(Module::iterator func = M.begin(); func != M.end(); func++){
 
 				CPLatticeNode* beginNode = new CPLatticeNode(true, false);
-				//errs()<<"statement1\n";
 				CPFlowFunction* flowFunc = new CPFlowFunction();
-				//errs()<<"statement2\n";
 				FlowFunction* flowFunc_cast = dyn_cast<FlowFunction>(flowFunc);
 				WorklistAlg* worklistAlg = new WorklistAlg();
 				errs()<<"begin to run worklistAlg\n";
 				errs()<<"\n";
 				map<Instruction*, LatticeNode*> finalMap = worklistAlg->Run_Worklist(*func, flowFunc_cast, beginNode);
-//				errs() << "finalMap size is: " << finalMap.size()<<"\n";
-
 				errs() << "done\n";
 
 			}
