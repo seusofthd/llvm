@@ -8,6 +8,7 @@
 /*********************/
 #include "../FlowFunction/CSEFlowFunction.h"
 #include "../FlowFunction/MAYPFlowFunction.h"
+#include "../FlowFunction/CPFlowFunction.h"
 /*********************/
 #include <map>
 #include <queue>

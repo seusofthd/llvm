@@ -139,6 +139,10 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 		MAYPFlowFunction *func = cast<MAYPFlowFunction>(flowFunc);
 		new_output = (*func)(inst, input);
 	}
+	if(isa<CPFlowFunction>(flowFunc)){
+		CPFlowFunction *func = cast<CPFlowFunction>(flowFunc);
+		new_output = (*func)(inst, input);
+	}
 /*make judgement on whether there are difference between new output lattice and old one*/
 	LatticeNode *old_output = output_map[inst];
 	bool label = old_output->equal(new_output);
