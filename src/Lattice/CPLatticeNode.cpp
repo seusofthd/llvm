@@ -15,21 +15,23 @@ LatticeNode* CPLatticeNode::join(LatticeNode* node){
   }
 
 	CPLatticeNode* cpNode = dyn_cast<CPLatticeNode>(node);
-	map<Value*, ConstantInt*> statements1 = this->statements;
-	map<Value*, ConstantInt*> statements2 = cpNode->statements;
-	map<Value*, ConstantInt*> new_statements;
+	//map<Value*, ConstantInt*> statements1 = this->statements;
+  map<Value*, int> data_info1 = this->data_info;
 
-	for(map<Value*, ConstantInt*>::iterator iter = statements1.begin(); iter != statements1.end(); iter++){
+  map<Value*, int> data_info2 = cpNode->data_info;
+	map<Value*, int> new_data_info;
+
+	for(map<Value*, int>::iterator iter = data_info1.begin(); iter != data_info1.end(); iter++){
 		Value* var = iter->first;
-    ConstantInt* c1 = iter->second;
-    if (statements2.count(var) > 0){
-      ConstantInt* c2 = statements2[var];
+    int c1 = iter->second;
+    if (data_info2.count(var) > 0){
+      int c2 = data_info2[var];
       if (c1 == c2){
-        new_statements[var] = c1;
+        new_data_info[var] = c1;
       }
     }
 	}
-  CPLatticeNode* res = new CPLatticeNode(false, false, new_statements);
+  CPLatticeNode* res = new CPLatticeNode(false, false, new_data_info);
   errs() << "joined\n";
   return res;
 }
@@ -49,20 +51,20 @@ bool CPLatticeNode::equal(LatticeNode* node){
 
 	CPLatticeNode* cpNode = dyn_cast<CPLatticeNode>(node);
 //	errs() << "CPLatticeNode equal function\n";
-	map<Value*, ConstantInt*> statements1 = this->statements;
-	map<Value*, ConstantInt*> statements2 = cpNode->statements;
+	map<Value*, int> data_info1 = this->data_info;
+	map<Value*, int> data_info2 = cpNode->data_info;
 
-	for(map<Value*, ConstantInt*>::iterator iter = statements1.begin(); iter != statements1.end(); iter++){
+	for(map<Value*, int>::iterator iter = data_info1.begin(); iter != data_info1.end(); iter++){
 	   Value* var = iter->first;
-     ConstantInt* c1 = iter->second;
-     if(statements2.count(var) <= 0){
+     int c1 = iter->second;
+     if(data_info2.count(var) <= 0){
        //errs()<<"equal tested\n";
        return false;
      }
      else{
-       ConstantInt* c2 = statements2[var];
+       int c2 = data_info2[var];
        // if (c1!=c2)
-       if (c1->getValue() != c2->getValue()){
+       if (c1 != c2){
          //errs()<<"equal tested\n";
          return false;
        }
@@ -76,9 +78,9 @@ void CPLatticeNode::print(){
 
 	errs() << "---CPLatticeNode Info---\n";
 	errs() << "Bottom:" << this->isBottom << "  Top:" << this->isTop << "\n";
-	for(map<Value*, ConstantInt*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
+	for(map<Value*, int>::iterator iter = data_info.begin(); iter != data_info.end(); iter++){
      Value* var = iter->first;
-     ConstantInt* c = iter->second;
+     int c = iter->second;
      /*if (var->getName().size() < 10){
        errs() << var->getName().str();
      }
@@ -86,7 +88,7 @@ void CPLatticeNode::print(){
        errs() << var->getValueName();
      }*/
      if(var->hasName()){
-       errs() << var->getName() <<  " --> " << c->getValue() << ", ";
+       errs() << var->getName() <<  " --> " << c << ", ";
      }
    }
     errs()<<"\n";

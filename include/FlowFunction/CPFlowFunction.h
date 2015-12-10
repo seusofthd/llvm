@@ -44,12 +44,12 @@ public:
 		//errs() << "interface!!!22222222\n";
 		*/
 
-		map<Value*, ConstantInt*> stmt = in->statements;
-		map<Value*, ConstantInt*> tmp_info = in->tmp_info;
-		map<Value*, int> invalid_tmp = in->invalid_tmp;
-		out = new CPLatticeNode(false, false, stmt);
-		out -> tmp_info = tmp_info;
-		out -> invalid_tmp = invalid_tmp;
+		//map<Value*, int> info = in->data_info;
+		map<Value*, int> info = in->data_info;
+		//map<Value*, int> invalid_tmp = in->invalid_tmp;
+		out = new CPLatticeNode(false, false, info);
+		//out -> tmp_info = tmp_info;
+		//out -> invalid_tmp = invalid_tmp;
 		visit(inst);
 	  //errs() << "after visiting, statement size:" << out->statements.size() << "\n";
 		LatticeNode* cast_out = out;
@@ -80,38 +80,15 @@ public:
 	}
 
 	void visitStoreInst(StoreInst &I){
-		/*
-		errs() << I << '\n';
-		errs() << *I.getValueOperand() << '\n';
-		errs() << (out->tmp_info.find(I.getValueOperand( )) != out->tmp_info.end()) << '\n';
-		if (out->tmp_info.find(I.getValueOperand()) != out->tmp_info.end()){
-			if (out->invalid_tmp.find(I.getValueOperand()) == out->invalid_tmp.end()){
-				out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(out->tmp_info[I.getValueOperand()]);
-			}
-			else{
-				out->statements.erase(I.getPointerOperand());
-			}
+
+		if (out->data_info.find(I.getPointerOperand()) != out->data_info.end()){
+				out->data_info.erase(I.getPointerOperand());
 		}
-		else{
-			out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
-		}*/
-		//errs() << "storing!!\n";
-		//errs() << *I.getValueOperand() << '\n';
-		if (out->statements.find(I.getPointerOperand()) != out->statements.end()){
-				out->statements.erase(I.getPointerOperand());
+		if (isa<ConstantInt>(I.getValueOperand())){
+			out->data_info[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand())->getLimitedValue();
 		}
-		if (out->statements.find(I.getValueOperand()) != out->statements.end()){
-			//errs() << "storing1112312\n";
-			//errs() << *out->statements[I.getValueOperand()] << '\n';
-			out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(out->statements[I.getValueOperand()]);
-		}
-		else{
-			    /* I.getValueOperand()->getValueID() == 11 || I.getValueOperand()->getValueID() == 12 */
-			if (isa<ConstantInt>(I.getValueOperand())){
-				//is
-				out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
-			}
-			//out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
+		else if(out->data_info.find(I.getValueOperand()) != out->data_info.end()){
+			out->data_info[I.getPointerOperand()] = out->data_info[I.getValueOperand()];
 		}
 	}
 
@@ -131,17 +108,17 @@ public:
 		*/
 		//errs() << "load in\n";
 		Value* tmp = &I;
-		errs() << (out->statements.find(I.getPointerOperand()) != out->statements.end()) <<'\n';
-		if (out->statements.find(I.getPointerOperand()) != out->statements.end()){
+		errs() << (out->data_info.find(I.getPointerOperand()) != out->data_info.end()) <<'\n';
+		if (out->data_info.find(I.getPointerOperand()) != out->data_info.end()){
 			//errs() << "loading\n";
 			// exist in the incoming information
 			//errs() << (*out->statements[I.getPointerOperand()]) << "\n";
-			out->statements[tmp] = out->statements[I.getPointerOperand()];
+			out->data_info[tmp] = out->data_info[I.getPointerOperand()];
 		}
 		/////////////
 		else{
-			if (out->statements.find(tmp) != out->statements.end()){
-				out->statements.erase(tmp);
+			if (out->data_info.find(tmp) != out->data_info.end()){
+				out->data_info.erase(tmp);
 				errs() << "erase existing info\n";
 			}
 		}
@@ -149,50 +126,84 @@ public:
 	}
 
 	void visitBinaryOperator(BinaryOperator &I){
+		Instruction* inst = &I;
+
+		Value* left = inst->getOperand(0);
+		Value* right = inst->getOperand(1);
+		errs() << "YUYUYU:  " << *left << ',' << *right << '\n';
+
+
 		errs() << "BinaryOperator12345n";
-		User::op_iterator it = I.op_begin();
+		//User::op_iterator it = I.op_begin();
     int opcode = I.getOpcode();
 
+    //bool flag;
 		int result;
 		int a;
 		int b;
 
-		if(isa<ConstantInt>(*it) && isa<ConstantInt>(*(it+1))){
-			a = (*(it))->getValue();
-			b = (*(it))->getValue();
+		if (out->data_info.find(&I) != out->data_info.end()){
+			out->data_info.erase(&I);
+		}
+
+		if (!isa<ConstantInt>(left) && out->data_info.find(left) == out->data_info.end()){
+			return;
+		}
+		if (!isa<ConstantInt>(right) && out->data_info.find(right) == out->data_info.end()){
+			return;
+		}
+
+		if(isa<ConstantInt>(left) && isa<ConstantInt>(right)){
+			a = dyn_cast<ConstantInt>(left)->getLimitedValue();
+			b = dyn_cast<ConstantInt>(right)->getLimitedValue();
+			//a = dyn_cast<ConstantInt>(left)->getLimitedValue();
+		}
+		else if (isa<ConstantInt>(left) && out->data_info.find(right) != out->data_info.end()){
+			a = dyn_cast<ConstantInt>(left)->getLimitedValue();
+			b = out->data_info[right];
+		}
+		else if (isa<ConstantInt>(right) && out->data_info.find(left) != out->data_info.end()){
+			a = out->data_info[left];
+			b = dyn_cast<ConstantInt>(right)->getLimitedValue();
+		}
+		else if (out->data_info.find(right) != out->data_info.end() && out->data_info.find(left) != out->data_info.end()) {
+			a = out->data_info[left];
+			b = out->data_info[right];
+		}
+		else{
+			errs() << "unexpected error!!!!!\n";
 		}
 		/*
 		if (out->statements.find(*it) != out->statements.end()
 		    && out->statements.find(*(it+1)) != out->statements.end()){
 		}*/
 
-
-
 		if (opcode == 8){
 			//ADD
 			errs() << "ADD\n";
+			result = a + b;
 		}
 		else if (opcode == 10){
 			//SUB
 			errs() << "SUB\n";
+			result = a - b;
 		}
 		else if(opcode == 12){
 			//MUL
 			errs() << "MUL\n";
+			result = a * b;
 		}
 
-		ConstantInt* a = new ConstantInt()
+		out->data_info[&I] = result;
 
 		//if(out->statements.find())
 
 		//errs() << I[it] << "YEYEYE" <<I[it] <<'\n';
 		//errs() << "YEYEYE" << "***"<< (I.getOpcode()) <<"***" << *(*it) <<  ": " << *(out->statements[*it])  << " and " << *(*(it+1)) <<'\n';
-		errs() << "YEYEYE" << I << "***"<< (I.getOpcode()) <<"***" <<  ": " << *(out->statements[*it])  << " and " << *(*(it+1)) <<'\n';
-
-
-
+		//errs() << "YEYEYE" << I << "***"<< (I.getOpcode()) <<"***" <<  ": " << *(out->data_info[*it])  << " and " << *(*(it+1)) <<'\n';
 
 	}
+
 
 /*
 	static std::pair<Use*, Use *> getOperands(BinaryOperator &BO){
