@@ -61,7 +61,8 @@ bool CPLatticeNode::equal(LatticeNode* node){
      }
      else{
        ConstantInt* c2 = statements2[var];
-       if (c1 != c2){
+       // if (c1!=c2)
+       if (c1->getValue() != c2->getValue()){
          //errs()<<"equal tested\n";
          return false;
        }

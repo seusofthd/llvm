@@ -97,15 +97,21 @@ public:
 		}*/
 		//errs() << "storing!!\n";
 		//errs() << *I.getValueOperand() << '\n';
+		if (out->statements.find(I.getPointerOperand()) != out->statements.end()){
+				out->statements.erase(I.getPointerOperand());
+		}
 		if (out->statements.find(I.getValueOperand()) != out->statements.end()){
 			//errs() << "storing1112312\n";
 			//errs() << *out->statements[I.getValueOperand()] << '\n';
 			out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(out->statements[I.getValueOperand()]);
 		}
 		else{
-			if (I.getValueOperand()->getValueID() == 11 || I.getValueOperand()->getValueID() == 12){
+			    /* I.getValueOperand()->getValueID() == 11 || I.getValueOperand()->getValueID() == 12 */
+			if (isa<ConstantInt>(I.getValueOperand())){
+				//is
 				out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
 			}
+			//out->statements[I.getPointerOperand()] = dyn_cast<ConstantInt>(I.getValueOperand());
 		}
 	}
 
@@ -132,14 +138,79 @@ public:
 			//errs() << (*out->statements[I.getPointerOperand()]) << "\n";
 			out->statements[tmp] = out->statements[I.getPointerOperand()];
 		}
+		/////////////
+		else{
+			if (out->statements.find(tmp) != out->statements.end()){
+				out->statements.erase(tmp);
+				errs() << "erase existing info\n";
+			}
+		}
 		//errs() << "load out\n";
 	}
 
 	void visitBinaryOperator(BinaryOperator &I){
 		errs() << "BinaryOperator12345n";
-		errs() << I <<'\n';
+		User::op_iterator it = I.op_begin();
+    int opcode = I.getOpcode();
+
+		int result;
+		int a;
+		int b;
+
+		if(isa<ConstantInt>(*it) && isa<ConstantInt>(*(it+1))){
+			a = (*(it))->getValue();
+			b = (*(it))->getValue();
+		}
+		/*
+		if (out->statements.find(*it) != out->statements.end()
+		    && out->statements.find(*(it+1)) != out->statements.end()){
+		}*/
+
+
+
+		if (opcode == 8){
+			//ADD
+			errs() << "ADD\n";
+		}
+		else if (opcode == 10){
+			//SUB
+			errs() << "SUB\n";
+		}
+		else if(opcode == 12){
+			//MUL
+			errs() << "MUL\n";
+		}
+
+		ConstantInt* a = new ConstantInt()
+
+		//if(out->statements.find())
+
+		//errs() << I[it] << "YEYEYE" <<I[it] <<'\n';
+		//errs() << "YEYEYE" << "***"<< (I.getOpcode()) <<"***" << *(*it) <<  ": " << *(out->statements[*it])  << " and " << *(*(it+1)) <<'\n';
+		errs() << "YEYEYE" << I << "***"<< (I.getOpcode()) <<"***" <<  ": " << *(out->statements[*it])  << " and " << *(*(it+1)) <<'\n';
+
+
+
+
 	}
 
+/*
+	static std::pair<Use*, Use *> getOperands(BinaryOperator &BO){
+	    Use* S1;
+	    Use* S2;
+	    int i = 0;
+	    for (User::op_iterator OP = BO.op_begin(), OPE = BO.op_end(); OP != OPE; ++OP){
+	      if(i == 0){
+	        S1 = &*OP;
+	      }
+	      else{
+	        S2 = &*OP;
+	      }
+	      i++;
+	    }
+	    return std::make_pair(S1, S2);
+	  }
+*/
 /*
 
 void CPFlowFunction::visitBinaryOperator(BinaryOperator &I) {
