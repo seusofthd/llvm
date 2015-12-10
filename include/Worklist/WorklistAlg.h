@@ -7,6 +7,7 @@
 #include "llvm/Support/raw_ostream.h"
 /*********************/
 #include "../FlowFunction/CSEFlowFunction.h"
+#include "../FlowFunction/MAYPFlowFunction.h"
 /*********************/
 #include <map>
 #include <queue>

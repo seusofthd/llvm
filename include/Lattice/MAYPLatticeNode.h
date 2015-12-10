@@ -27,6 +27,7 @@ public:
 		return nodePtr->type == MAYPLATTICE;
 	}
 
+	/*Override virtual functions of */
 	set<Value*> point_to_all;
 	map<Value*, set<Value*> > point_to_info;
 };

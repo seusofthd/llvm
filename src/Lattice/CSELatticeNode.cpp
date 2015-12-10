@@ -4,11 +4,9 @@ LatticeNode* CSELatticeNode::join(LatticeNode* node){
 	if (node->isBottom){
 		return this;
 	}
-
 	if (this->isBottom){
 		return node;
 	}
-
 	CSELatticeNode* cseNode = dyn_cast<CSELatticeNode>(node);
 	map<Value*, Instruction*> statements1 = this->statements;
 	map<Value*, Instruction*> statements2 = cseNode->statements;

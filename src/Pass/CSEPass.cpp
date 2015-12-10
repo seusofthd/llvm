@@ -46,10 +46,5 @@ namespace {
 
 
 
-
-
-
-
-
 char CSEPass::ID = 0;
 static RegisterPass<CSEPass> X("CSEPass", "Common subexpression elimination"); 

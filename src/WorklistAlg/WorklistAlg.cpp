@@ -12,23 +12,26 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 		for(BasicBlock::iterator inst = B->begin(); inst != B->end(); inst++){
 			predecessor[inst] = vector<Instruction*>();
 			successor[inst] = vector<Instruction*>();
+//			errs() << *inst << "\n";
 		}
 	}
 
-
 	for(Function::iterator B = F.begin(); B != F.end(); B++){
 		for(BasicBlock::iterator inst = B->begin(); inst != B->end(); inst++){
-//			errs() << *inst << "\n";
+			//errs() << *inst << "\n";
 			worklist.push(inst);
-			LatticeNode* node = new LatticeNode(beginNode->type, false, true);
+//			LatticeNode* node = new LatticeNode(beginNode->type, false, true);
 //			find it's next node
-			output_map[inst] = node;
+			output_map[inst] = beginNode;
 			if(!inst->isTerminator()){
 				BasicBlock::iterator next_inst = inst;
 				next_inst++;
+//				errs() << "instruction:" << *inst << "\n";
+//				errs() << "next instruction:"<<*next_inst << "\n";
 				predecessor[next_inst].push_back(inst);
 				successor[inst].push_back(next_inst);
 			}else{
+//				errs() << "terminator:" << *inst << "\n";
 				const TerminatorInst* terminator = B->getTerminator();
 				int cnt = terminator->getNumSuccessors();
 				for(int i = 0; i < cnt; i++){
@@ -39,6 +42,23 @@ void WorklistAlg::init(Function &F, FlowFunction* flowFunc, LatticeNode* beginNo
 			}
 		}
 	}
+
+// debug
+//	for(Function::iterator B = F.begin(); B != F.end(); B++){
+//		for(BasicBlock::iterator inst = B->begin(); inst != B->end(); inst++){
+//			errs() << "Instruction:" << *inst << "\n";
+//			errs() << "predecessors:\n";
+//			for(vector<Instruction*>::iterator iter = predecessor[inst].begin(); iter != predecessor[inst].end(); iter++){
+//				errs()<<**iter << "\n";
+//			}
+//			errs() << "successor:\n";
+//			for(vector<Instruction*>::iterator iter = successor[inst].begin(); iter != successor[inst].end(); iter++){
+//				errs()<<**iter << "\n";
+//			}
+//			errs() << "\n\n";
+//	
+//		}
+//	}
 	// check the correctness;
 //	errs() << "worklist algorithm initialize end\n";
 //	for(map<Instruction*, vector<Instruction*> >::iterator iter = successor.begin(); iter != successor.end(); iter++){
@@ -58,19 +78,18 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 		Instruction *inst = worklist.front();
 		worklist.pop();
 		if(!matchFlowFunc(inst, flowFunc, beginNode)){
-//			errs() << "add in worklist\n";
 			for(vector<Instruction*>::iterator iter = successor[inst].begin(); iter != successor[inst].end(); iter++){
-				worklist.push(*iter);
+				//worklist.push(*iter);
 			}
 		}
 	}
 	
-	errs() << "---worklist algorithm output_map dump started---\n\n";
-	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
-		errs()<< *iter->first << "\n";
-		iter->second->print(); 
-	}
-	errs() << "---worklist algorithm output_map dump finished---\n\n";
+//	errs() << "---worklist algorithm output_map dump started---\n\n";
+//	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
+//		errs()<< *iter->first << "\n";
+//		iter->second->print(); 
+//	}
+//	errs() << "---worklist algorithm output_map dump finished---\n\n";
 	// construct finalMap
 	for(map<Instruction*, LatticeNode*>::iterator iter = output_map.begin(); iter != output_map.end(); iter++){
 		Instruction* inst = iter->first;
@@ -88,12 +107,12 @@ map<Instruction*, LatticeNode*> WorklistAlg::Run_Worklist(Function &F, FlowFunct
 			finalMap[inst] = output;
 		}
 	}
-	errs() << "---worklist algorithm finalmap dump started---\n\n";
-	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
-		errs() << *iter->first << "\n";
-		iter->second->print();	
-	}
-	errs() << "---worklist algorithm finalmap dump finished---\n\n";
+//	errs() << "---worklist algorithm finalmap dump started---\n\n";
+//	for(map<Instruction*, LatticeNode*>::iterator iter = finalMap.begin(); iter != finalMap.end(); iter++){
+//		errs() << *iter->first << "\n";
+//		iter->second->print();	
+//	}
+//	errs() << "---worklist algorithm finalmap dump finished---\n\n";
 	return finalMap;
 }
 
@@ -108,12 +127,14 @@ bool WorklistAlg::matchFlowFunc(Instruction* inst, FlowFunction* flowFunc, Latti
 	}
 	LatticeNode *new_output;
 
-/*add more cases when needed*/	
+/*add more cases when needed*/
 	if(isa<CSEFlowFunction>(flowFunc)){
-
-//		errs() << "cast function to cse\n";
 //		errs() << flowFunc->type;
 		CSEFlowFunction *func = cast<CSEFlowFunction>(flowFunc);
+		new_output = (*func)(inst, input);
+	}
+	if(isa<MAYPFlowFunction>(flowFunc)){
+		MAYPFlowFunction *func = cast<MAYPFlowFunction>(flowFunc);
 		new_output = (*func)(inst, input);
 	}
 /*make judgement on whether there are difference between new output lattice and old one*/

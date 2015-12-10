@@ -38,9 +38,9 @@ void CSEFlowFunction::visitBinaryOperator(BinaryOperator &I){
 /*I don't know whether this kind of writing will invoke the LatticeNode join function or CSELatticeNode join function*/
 CSELatticeNode* CSEFlowFunction::merge(vector<LatticeNode*> input){
 	while(input.size() > 1){
-		LatticeNode *node1 = input.back();
+		CSELatticeNode *node1 = dyn_cast<CSELatticeNode>(input.back());
 		input.pop_back();
-		LatticeNode *node2 = input.back();
+		CSELatticeNode *node2 = dyn_cast<CSELatticeNode>(input.back());
 		input.pop_back();
 		LatticeNode *newNode = node1->join(node2);
 		input.push_back(newNode);

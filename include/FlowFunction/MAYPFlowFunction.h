@@ -19,8 +19,10 @@ public:
 	virtual void print();
 	MAYPLatticeNode* merge(vector<LatticeNode*> input);
 	//Function override from InstVisitor
-	virtual void visitBinaryOperator(BinaryOperator &B);
-	
+	virtual void visitLoadInst(LoadInst &I);
+	virtual void visitStoreInst(StoreInst &I);
+	MAYPLatticeNode* in;
+	MAYPLatticeNode* out;
 };
 
 #endif
