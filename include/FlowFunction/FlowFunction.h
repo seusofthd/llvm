@@ -5,6 +5,7 @@
 #include "llvm/InstVisitor.h"
 #include "../../include/Lattice/LatticeNode.h"
 #include "../../include/Lattice/CSELatticeNode.h"
+#include "../../include/Lattice/RALatticeNode.h"
 #include <vector>
 
 using namespace std;

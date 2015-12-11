@@ -9,6 +9,7 @@
 #include "../FlowFunction/CSEFlowFunction.h"
 #include "../FlowFunction/MAYPFlowFunction.h"
 #include "../FlowFunction/CPFlowFunction.h"
+#include "../FlowFunction/RAFlowFunction.h"
 /*********************/
 #include <map>
 #include <queue>

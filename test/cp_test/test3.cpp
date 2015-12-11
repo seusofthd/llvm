@@ -1,7 +1,4 @@
-#include<iostream>
-using namespace std;
-
-int main()
+void test3()
 {   
     int a = 1;
     int b = 2;

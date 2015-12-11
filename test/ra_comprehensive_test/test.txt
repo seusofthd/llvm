@@ -1,0 +1,424 @@
+---worklist algorithm finalmap dump started---
+
+  br label %if.end4
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+
+  %add = add nsw i32 1, 2
+---RALatticeNode Info---
+Bottom:1  Top:0
+
+  %sub = sub nsw i32 4, 5
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+
+  %mul = mul nsw i32 6, 7
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+
+  %cmp = icmp sgt i32 %sub, 10
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  br i1 %cmp, label %if.then, label %if.else
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  br label %if.end4
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  %cmp1 = icmp sgt i32 %sub, 0
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  br i1 %cmp1, label %if.then2, label %if.else3
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  br label %if.end
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  br label %if.end
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+
+  %add11 = add nsw i32 %add10, %k.0
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+  %add8 = add nsw i32 %add, %sub
+full-set
+  %add9 = add nsw i32 %add8, %mul
+full-set
+  %add10 = add nsw i32 %add9, %y.1
+full-set
+
+  ret i32 %add11
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %add11 = add nsw i32 %add10, %k.0
+full-set
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+  %add8 = add nsw i32 %add, %sub
+full-set
+  %add9 = add nsw i32 %add8, %mul
+full-set
+  %add10 = add nsw i32 %add9, %y.1
+full-set
+
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+
+  br label %while.cond
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  %cmp5 = icmp slt i32 %i.0, 100
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  br i1 %cmp5, label %while.body, label %while.end
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  %add6 = add nsw i32 %i.0, 1
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  %add7 = add nsw i32 %k.0, 1
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  br label %while.cond
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  %add8 = add nsw i32 %add, %sub
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+
+  %add9 = add nsw i32 %add8, %mul
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+  %add8 = add nsw i32 %add, %sub
+full-set
+
+  %add10 = add nsw i32 %add9, %y.1
+---RALatticeNode Info---
+Bottom:0  Top:0
+  %add = add nsw i32 1, 2
+[3,4)
+  %sub = sub nsw i32 4, 5
+[-1,0)
+  %mul = mul nsw i32 6, 7
+[42,43)
+  %y.0 = phi i32 [ 2, %if.then2 ], [ 3, %if.else3 ]
+[2,4)
+  %y.1 = phi i32 [ 1, %if.then ], [ %y.0, %if.end ]
+[1,4)
+  %k.0 = phi i32 [ 0, %if.end4 ], [ %add7, %while.body ]
+full-set
+  %i.0 = phi i32 [ 0, %if.end4 ], [ %add6, %while.body ]
+full-set
+  %add6 = add nsw i32 %i.0, 1
+full-set
+  %add7 = add nsw i32 %k.0, 1
+full-set
+  %add8 = add nsw i32 %add, %sub
+full-set
+  %add9 = add nsw i32 %add8, %mul
+full-set
+
+---worklist algorithm finalmap dump finished---
+

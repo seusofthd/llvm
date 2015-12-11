@@ -71,7 +71,7 @@ public:
 
 	void visitLoadInst(LoadInst &I){
 		Value* tmp = &I;
-		errs() << (out->data_info.find(I.getPointerOperand()) != out->data_info.end()) <<'\n';
+		//errs() << (out->data_info.find(I.getPointerOperand()) != out->data_info.end()) <<'\n';
 		if (out->data_info.find(I.getPointerOperand()) != out->data_info.end()){
 			out->data_info[tmp] = out->data_info[I.getPointerOperand()];
 		}
