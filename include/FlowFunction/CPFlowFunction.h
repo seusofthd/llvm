@@ -3,7 +3,7 @@
 
 #include "FlowFunction.h"
 #include "llvm/IR/InstrTypes.h"
-#include "helper.h"
+//#include "helper.h"
 #include "../Lattice/CPLatticeNode.h"
 #include "llvm/InstVisitor.h"
 #include <map>
