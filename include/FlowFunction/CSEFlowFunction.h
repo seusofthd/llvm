@@ -11,23 +11,19 @@ class CSEFlowFunction:public FlowFunction, public InstVisitor<CSEFlowFunction>{
 public:
 	CSEFlowFunction():FlowFunction(CSEFLOW){}
 //	~CSEFlowFunction(){delete in; delete out;}
-	LatticeNode* operator()(Instruction *inst, vector<LatticeNode*> input);
-
-	
+	LatticeNode* operator()(Instruction *inst, vector<LatticeNode*> input);	
 	static bool classof(const FlowFunction *func){
 		return func->type == CSEFLOW;
 	}
-
 	virtual void print();
 	CSELatticeNode* merge(vector<LatticeNode*> input);
 
 	/*Override InstVisitor Functions*/
-	void visitBinaryOperator(BinaryOperator &I);
+	virtual void visitBinaryOperator(BinaryOperator &I);
 //class member variable
 	CSELatticeNode* in;
 	CSELatticeNode* out;
-
-
 };
 
 #endif
+

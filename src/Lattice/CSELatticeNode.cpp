@@ -4,11 +4,9 @@ LatticeNode* CSELatticeNode::join(LatticeNode* node){
 	if (node->isBottom){
 		return this;
 	}
-
 	if (this->isBottom){
 		return node;
 	}
-
 	CSELatticeNode* cseNode = dyn_cast<CSELatticeNode>(node);
 	map<Value*, Instruction*> statements1 = this->statements;
 	map<Value*, Instruction*> statements2 = cseNode->statements;
@@ -52,7 +50,7 @@ void CSELatticeNode::print(){
 	errs() << "---CSELatticeNode Info---\n";
 	errs() << "Bottom:" <<this->isBottom << "  Top:" << this->isTop << "\n";
 	for(map<Value*, Instruction*>::iterator iter = statements.begin(); iter != statements.end(); iter++){
-		errs() << iter->first << "->"<<*(iter->second)<< "(" <<iter->second<<")" << "\n";
+		errs() << *iter->first << "->"<<*(iter->second)<< "(" <<iter->second<<")" << "\n";
 	}
 	errs() << "\n";
 }

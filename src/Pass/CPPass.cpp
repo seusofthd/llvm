@@ -13,22 +13,21 @@ using namespace llvm;
 using namespace std;
 
 namespace {
-	struct CPPass: public ModulePass{
+	struct CPPass: public FunctionPass{
 		static char ID;
-		CPPass():ModulePass(ID){}
-		virtual bool runOnModule(Module &M){
-			for(Module::iterator func = M.begin(); func != M.end(); func++){
-
+		CPPass():FunctionPass(ID){}
+		virtual bool runOnFunction(Function &func){
+//			for(Module::iterator func = M.begin(); func != M.end(); func++){
 				CPLatticeNode* beginNode = new CPLatticeNode(true, false);
 				CPFlowFunction* flowFunc = new CPFlowFunction();
 				FlowFunction* flowFunc_cast = dyn_cast<FlowFunction>(flowFunc);
 				WorklistAlg* worklistAlg = new WorklistAlg();
-				errs()<<"begin to run worklistAlg\n";
+//				errs()<<"begin to run worklistAlg\n";
 				errs()<<"\n";
-				map<Instruction*, LatticeNode*> finalMap = worklistAlg->Run_Worklist(*func, flowFunc_cast, beginNode);
+				map<Instruction*, LatticeNode*> finalMap = worklistAlg->Run_Worklist(func, flowFunc_cast, beginNode);
 				errs() << "done\n";
 
-			}
+//			}
 			return true;
 		}
 	};
@@ -55,5 +54,5 @@ namespace {
 
 
 
-char CPPass::ID = 1;
+char CPPass::ID = 0;
 static RegisterPass<CPPass> X("CPPass", "Constant Propogation");

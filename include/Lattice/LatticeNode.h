@@ -10,7 +10,7 @@ enum LatticeType{
 	CPLATTICE,
 	CSELATTICE,
 	RALATTICE,
-	PALATTICE
+	MAYPLATTICE
 };
 class LatticeNode {
 public:
@@ -18,7 +18,7 @@ public:
 	LatticeNode(LatticeType type, bool isTop, bool isBottom){ this->type = type; this->isTop = isTop; this->isBottom = isBottom;}
 //	LatticeType getType() const{ return type;}
 	/*Virtual functions. Cannot use pure virtual functions!!! Otherwise it cannot be initialized in the WorklistAlg class*/
-	virtual LatticeNode* join(LatticeNode* node){return NULL;}
+	virtual LatticeNode* join(LatticeNode* node){errs()<< "go to base class join func\n\n\n";return NULL;}
 	virtual bool equal(LatticeNode* node){return false;}
 	virtual void print(){errs()<<"---LatticeNode Info---\n";}
 //Class member variable

@@ -5,26 +5,32 @@
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Pass.h"
-
+#include "llvm/Support/ConstantRange.h"
 #include "../../include/Worklist/WorklistAlg.h"
-#include "../../include/Lattice/CSELatticeNode.h"
-#include "../../include/FlowFunction/CSEFlowFunction.h"
+#include "../../include/Lattice/RALatticeNode.h"
+#include "../../include/FlowFunction/RAFlowFunction.h"
 using namespace llvm;
 using namespace std;
 
 namespace {
-	struct CSEPass: public ModulePass{
+	struct RAPass: public ModulePass{
 		static char ID;
-		CSEPass():ModulePass(ID){}
+		RAPass():ModulePass(ID){}
 		virtual bool runOnModule(Module &M){
 			for(Module::iterator func = M.begin(); func != M.end(); func++){
-				CSELatticeNode* beginNode = new CSELatticeNode(true, false);
-				CSEFlowFunction* flowFunc = new CSEFlowFunction();
+				//errs() << "line0\n";
+                                RALatticeNode* beginNode = new RALatticeNode(true, false);
+				//errs() << "line1\n";
+				RAFlowFunction* flowFunc = new RAFlowFunction();
+				//errs() << "line2\n";
 				FlowFunction* flowFunc_cast = dyn_cast<FlowFunction>(flowFunc);
+				//errs() << "line3\n";
 				WorklistAlg* worklistAlg = new WorklistAlg();
+				//errs() << "line4\n";
 				map<Instruction*, LatticeNode*> finalMap = worklistAlg->Run_Worklist(*func, flowFunc_cast, beginNode); 	
+				//worklistAlg->Run_Worklist(*func, flowFunc_cast, beginNode); 	
 //				errs() << "finalMap size is: " << finalMap.size()<<"\n";			
-				errs() << "done\n";	
+				//errs() << "done\n";	
 			}
 			return true;
 		}
@@ -46,5 +52,10 @@ namespace {
 
 
 
-char CSEPass::ID = 0;
-static RegisterPass<CSEPass> X("CSEPass", "Common subexpression elimination"); 
+
+
+
+
+
+char RAPass::ID = 0;
+static RegisterPass<RAPass> X("RAPass", "Range Analysis"); 

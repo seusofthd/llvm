@@ -5,8 +5,7 @@
 #include "llvm/InstVisitor.h"
 #include "../../include/Lattice/LatticeNode.h"
 #include "../../include/Lattice/CSELatticeNode.h"
-#include "../../include/Lattice/CPLatticeNode.h"
-
+#include "../../include/Lattice/RALatticeNode.h"
 #include <vector>
 
 using namespace std;
@@ -16,14 +15,12 @@ enum FlowFunctionType{
 	CPFLOW,
 	CSEFLOW,
 	RAFLOW,
-	PAFLOW
+	MAYPFLOW
 };
 
 class FlowFunction{
 public:
-	FlowFunction(FlowFunctionType t):type(t){
-		errs()<<"flow function\n";
-	}
+	FlowFunction(FlowFunctionType t):type(t){}
 	virtual LatticeNode* operator()(Instruction *inst, vector<LatticeNode*> input){
 		errs()<<"go to FlowFunction ()\n";
 		return NULL;
