@@ -3,13 +3,13 @@
 LatticeNode* CPLatticeNode::join(LatticeNode* node){
 
   // in constant propogation, join is intersection
-  errs() << "incoming join\n";
+ // errs() << "incoming join\n";
   if (node->isBottom || this->isTop){
-    errs() << "joined\n";
+   // errs() << "joined\n";
     return this;
   }
   if (this->isBottom || node->isTop) {
-    errs() << "joined\n";
+	//errs() << "joined\n";
     return node;
   }
 
@@ -31,7 +31,7 @@ LatticeNode* CPLatticeNode::join(LatticeNode* node){
     }
 	}
   CPLatticeNode* res = new CPLatticeNode(false, false, new_data_info);
-  errs() << "joined\n";
+ // errs() << "joined\n";
   return res;
 }
 

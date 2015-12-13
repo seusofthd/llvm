@@ -3,7 +3,6 @@
 
 #include "FlowFunction.h"
 #include "llvm/IR/InstrTypes.h"
-#include "helper.h"
 #include "../Lattice/CPLatticeNode.h"
 #include "llvm/InstVisitor.h"
 #include <map>
@@ -21,7 +20,7 @@ public:
 	}
 
 	CPFlowFunction():FlowFunction(CPFLOW){
-		errs()<<"CPFlow function\n";
+		//errs()<<"CPFlow function\n";
 	}
 
   // flow function interface
@@ -42,15 +41,15 @@ public:
 	}
 
 	CPLatticeNode* merge(vector<LatticeNode*> input){
-		errs()<<"CPFlowFunction merge\n";
+		//errs()<<"CPFlowFunction merge\n";
 		while(input.size() > 1){
 			LatticeNode *node1 = input.back();
 			input.pop_back();
 			LatticeNode *node2 = input.back();
 			input.pop_back();
-			errs() << "before join\n";
+		//	errs() << "before join\n";
 			LatticeNode *newNode = node1->join(node2);
-			errs() << "after join\n";
+		//	errs() << "after join\n";
 			input.push_back(newNode);
 		}
 		CPLatticeNode * cpNode = dyn_cast<CPLatticeNode>(input.front());
@@ -72,14 +71,14 @@ public:
 
 	void visitLoadInst(LoadInst &I){
 		Value* tmp = &I;
-		errs() << (out->data_info.find(I.getPointerOperand()) != out->data_info.end()) <<'\n';
+		//errs() << (out->data_info.find(I.getPointerOperand()) != out->data_info.end()) <<'\n';
 		if (out->data_info.find(I.getPointerOperand()) != out->data_info.end()){
 			out->data_info[tmp] = out->data_info[I.getPointerOperand()];
 		}
 		else{
 			if (out->data_info.find(tmp) != out->data_info.end()){
 				out->data_info.erase(tmp);
-				errs() << "erase existing info\n";
+		//		errs() << "erase existing info\n";
 			}
 		}
 	}
@@ -118,21 +117,21 @@ public:
 			b = out->data_info[right];
 		}
 		else{
-			errs() << "unexpected error!!!!!\n";
+		//	errs() << "unexpected error!!!!!\n";
 		}
 		if (opcode == 8){
 			//ADD
-			errs() << "ADD\n";
+		//	errs() << "ADD\n";
 			result = a + b;
 		}
 		else if (opcode == 10){
 			//SUB
-			errs() << "SUB\n";
+		//	errs() << "SUB\n";
 			result = a - b;
 		}
 		else if(opcode == 12){
 			//MUL
-			errs() << "MUL\n";
+		//	errs() << "MUL\n";
 			result = a * b;
 		}
 		out->data_info[&I] = result;
